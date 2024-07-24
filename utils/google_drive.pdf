@@ -1,0 +1,29 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import os
+import time
+
+class GoogleDrive:
+    def __init__(self):
+        self.driver = webdriver.Chrome()
+
+    def login(self):
+        self.driver.get("https://accounts.google.com/signin/v2/identifier?service=wise")
+        email_input = self.driver.find_element_by_name("identifier")
+        email_input.send_keys("your-email@gmail.com")
+        email_input.send_keys(Keys.RETURN)
+        time.sleep(2)
+        password_input = self.driver.find_element_by_name("password")
+        password_input.send_keys("your-password")
+        password_input.send_keys(Keys.RETURN)
+        time.sleep(2)
+    
+    def upload_pdfs(self, pdf_files):
+        self.login()
+        self.driver.get("https://drive.google.com/drive/my-drive")
+        for pdf in pdf_files:
+            upload_button = self.driver.find_element_by_name("File upload")
+            upload_button.send_keys(os.path.abspath(pdf))
+            time.sleep(2)
+        
+        self.driver.quit()
